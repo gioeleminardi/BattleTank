@@ -25,7 +25,16 @@ public:
 	ATank *GetControlledTank() const;
 
 private:
+	UPROPERTY(EditAnywhere)
+		float CrossHairXRelativePosition = 0.5f;
+	UPROPERTY(EditAnywhere)
+		float CrossHairYRelativePosition = 0.33333f;
+	UPROPERTY(EditAnywhere)
+		float LineTraceRange = 1000000.f;
+
 	// Move the barrel/turrent assembly toward the crosshair
 	void AimTowardsCrosshair();
-
+	bool GetSightRayHitLocation(FVector &OutHitLocation) const;
+	bool GetLookDirection(FVector2D ScreenLocation, FVector &LookDirection) const;
+	bool GetLookVectorHitLocation(FVector LookDirection, FVector &OutHitLocation) const;
 };

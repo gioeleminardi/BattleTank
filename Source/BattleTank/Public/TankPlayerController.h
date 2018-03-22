@@ -8,17 +8,24 @@
 #include "TankPlayerController.generated.h"
 
 /**
- * 
+ *
  */
 UCLASS()
 class BATTLETANK_API ATankPlayerController : public APlayerController
 {
 	GENERATED_BODY()
-	
-public:
 
-	void BeginPlay() override;
+protected:
+	virtual void BeginPlay() override;
+
+public:
+	// Called every frame
+	virtual void Tick(float DeltaTime) override;
 
 	ATank *GetControlledTank() const;
-	
+
+private:
+	// Move the barrel/turrent assembly toward the crosshair
+	void AimTowardsCrosshair();
+
 };

@@ -7,6 +7,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/GameplayStaticsTypes.h"
 #include "TankBarrel.h"
+#include "TankTurret.h"
 
 
 
@@ -21,6 +22,11 @@ UTankAimingComponent::UTankAimingComponent()
 }
 
 
+void UTankAimingComponent::SetTurretReference(UTankTurret * TurretToSet)
+{
+	Turret = TurretToSet;
+}
+
 void UTankAimingComponent::SetBarrelReference(UTankBarrel * BarrelToSet)
 {
 	Barrel = BarrelToSet;
@@ -30,6 +36,7 @@ void UTankAimingComponent::AimAt(FVector HitLocation, float LaunchSpeed)
 {
 
 	if (!Barrel) { return; }
+	if (!Turret) { return; }
 
 	FVector OutVelocity;
 	FVector StartLocation = Barrel->GetSocketLocation(FName("Projectile"));
@@ -49,12 +56,13 @@ void UTankAimingComponent::AimAt(FVector HitLocation, float LaunchSpeed)
 	if (bHaveAimSolution) {
 		auto AimDirection = OutVelocity.GetSafeNormal();
 		MoveBarrel(AimDirection);
+		MoveTurret(AimDirection);
 		auto Time = GetWorld()->GetTimeSeconds();
-		UE_LOG(LogTemp, Warning, TEXT("%f: Aim Solution"), Time);
+		UE_LOG(LogTemp, Warning, TEXT("[%f][%s][%s][Aim Solution]"), Time, *GetName(), *(GetOwner()->GetName()));
 	}
 	else {
 		auto Time = GetWorld()->GetTimeSeconds();
-		UE_LOG(LogTemp, Warning, TEXT("%f: No Aim Solution"), Time);
+		UE_LOG(LogTemp, Warning, TEXT("[%f][%s][%s][No Aim Solution]"), Time, *GetName(), *(GetOwner()->GetName()));
 	}
 
 
@@ -67,7 +75,15 @@ void UTankAimingComponent::MoveBarrel(FVector AimDirection)
 	auto AimAsRotator = AimDirection.Rotation();
 	auto DeltaRotator = AimAsRotator - BarrelRotator;
 
-	Barrel->Elevate(5.f);
+	Barrel->Elevate(DeltaRotator.Pitch);
+}
+
+void UTankAimingComponent::MoveTurret(FVector AimDirection)
+{
+	auto TurretRotator = Turret->GetForwardVector().Rotation();
+	auto AimAsRotator = AimDirection.Rotation();
+	auto DeltaRotator = AimAsRotator - TurretRotator;
+	Turret->Rotate(DeltaRotator.Yaw);
 }
 
 // Called when the game starts

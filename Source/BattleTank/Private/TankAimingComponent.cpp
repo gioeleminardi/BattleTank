@@ -57,15 +57,7 @@ void UTankAimingComponent::AimAt(FVector HitLocation, float LaunchSpeed)
 		auto AimDirection = OutVelocity.GetSafeNormal();
 		MoveBarrel(AimDirection);
 		MoveTurret(AimDirection);
-		auto Time = GetWorld()->GetTimeSeconds();
-		UE_LOG(LogTemp, Warning, TEXT("[%f][%s][%s][Aim Solution]"), Time, *GetName(), *(GetOwner()->GetName()));
 	}
-	else {
-		auto Time = GetWorld()->GetTimeSeconds();
-		UE_LOG(LogTemp, Warning, TEXT("[%f][%s][%s][No Aim Solution]"), Time, *GetName(), *(GetOwner()->GetName()));
-	}
-
-
 }
 
 void UTankAimingComponent::MoveBarrel(FVector AimDirection)

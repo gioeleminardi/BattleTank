@@ -26,11 +26,11 @@ public:
 	ATank *GetControlledTank() const;
 
 private:
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditDefaultsOnly)
 		float CrossHairXRelativePosition = 0.5f;
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditDefaultsOnly)
 		float CrossHairYRelativePosition = 0.33333f;
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditDefaultsOnly)
 		float LineTraceRange = 1000000.f;
 
 	// Move the barrel/turrent assembly toward the crosshair
